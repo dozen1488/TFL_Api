@@ -1,0 +1,26 @@
+<h1>{{ title }}</h1>
+
+<!-- this creates a google map on the page with the given lat/lng from -->
+<!-- the component as the initial center of the map: -->
+
+<sebm-google-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" (mapClick)="mapClicked($event)">
+
+    <sebm-google-map-polyline *ngFor="let path of route">
+        <sebm-google-map-polyline-point *ngFor="let point of path" [latitude]="point[1]" [longitude]="point[0]">
+        </sebm-google-map-polyline-point>
+    </sebm-google-map-polyline>
+
+  <sebm-google-map-marker *ngFor="let stopPoint of stopPointsInRadius" 
+  [latitude]="stopPoint.lat" [longitude]="stopPoint.lon"
+  (markerClick) = "markerClicked(stopPoint.naptanId)">
+  </sebm-google-map-marker>
+  <sebm-google-map-circle *ngIf="circle" [latitude]="circle.latitude" 
+                          [longitude]="circle.longitude" 
+                          [radius]="circle.radius"
+                          [fillColor]="'red'"
+                          [circleDraggable]="false"
+                          [editable]="true"
+                          [visible] = "circle.visible"
+                          (radiusChange) = "changeRadius($event)" >
+  </sebm-google-map-circle>
+</sebm-google-map>
