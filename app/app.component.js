@@ -32,6 +32,8 @@ var AppComponent = (function () {
         this.httpservice.getRoutes(naptanId).subscribe(function (data) {
             for (var i = 0; i < data.length; i++) {
                 _this.route[i] = JSON.parse(data[i].lineString)[0];
+                _this.route[i].color = String("#" + ((1 << 24) * Math.random() | 0).toString(16));
+                console.log(JSON.parse(data[i].lineString));
             }
         }, function (error) { return console.log(error); });
         console.log(this.httpservice.url);
@@ -69,12 +71,14 @@ var AppComponent = (function () {
     AppComponent.prototype.markerClicked = function (naptanId) {
         this.route = [];
         var stpoint;
-        this.stopPointsInRadius.forEach(function (point) {
+        this.stopPointsInRadius = this.stopPointsInRadius.filter(function (point) {
             if (point.naptanId == naptanId)
-                stpoint = point;
+                return true;
+            else
+                return false;
         });
-        this.stopPointsInRadius = [];
-        this.stopPointsInRadius.push(stpoint);
+        //this.stopPointsInRadius = [];
+        //this.stopPointsInRadius.push(stpoint);
         console.log(this.stopPointsInRadius);
         this.getRoute(naptanId);
         this.circle.visible = false;

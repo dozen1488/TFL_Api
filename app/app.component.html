@@ -5,14 +5,23 @@
 
 <sebm-google-map [latitude]="lat" [longitude]="lng" [zoom]="zoom" (mapClick)="mapClicked($event)">
 
-    <sebm-google-map-polyline *ngFor="let path of route">
-        <sebm-google-map-polyline-point *ngFor="let point of path" [latitude]="point[1]" [longitude]="point[0]">
+    <sebm-google-map-polyline *ngFor="let path of route" [strokeColor]="path.color">
+        <sebm-google-map-polyline-point *ngFor="let point of path" 
+        [latitude]="point[1]" 
+        [longitude]="point[0]">
         </sebm-google-map-polyline-point>
     </sebm-google-map-polyline>
 
   <sebm-google-map-marker *ngFor="let stopPoint of stopPointsInRadius" 
   [latitude]="stopPoint.lat" [longitude]="stopPoint.lon"
   (markerClick) = "markerClicked(stopPoint.naptanId)">
+        <sebm-google-map-info-window [disableAutoPan]="true">
+        <h4>{{stopPoint.commonName}}</h4> 
+        <p> Available lines </p>
+        <ul *ngIf="stopPoint.lineGroup.length > 0">
+            <li *ngFor="let num of stopPoint.lineGroup[0].lineIdentifier">{{num}}</li>
+        </ul>
+        </sebm-google-map-info-window>
   </sebm-google-map-marker>
   <sebm-google-map-circle *ngIf="circle" [latitude]="circle.latitude" 
                           [longitude]="circle.longitude" 

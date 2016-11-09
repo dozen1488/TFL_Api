@@ -42,6 +42,8 @@ export class AppComponent implements OnInit
             for (var i = 0; i < data.length; i ++)
             {
               this.route[i] = JSON.parse(data[i].lineString)[0];
+              this.route[i].color = String("#"+((1<<24)*Math.random()|0).toString(16));
+              console.log(JSON.parse(data[i].lineString));
             }
           },
           error => console.log(<any> error)
@@ -100,15 +102,15 @@ export class AppComponent implements OnInit
   {
     this.route = [];
     var stpoint;
-    this.stopPointsInRadius.forEach
+    this.stopPointsInRadius = this.stopPointsInRadius.filter
       ( 
         point => 
         {
-          if(point.naptanId == naptanId) stpoint = point;
+          if(point.naptanId == naptanId) return true; else return false;
         }
       );
-    this.stopPointsInRadius = [];
-    this.stopPointsInRadius.push(stpoint);
+    //this.stopPointsInRadius = [];
+    //this.stopPointsInRadius.push(stpoint);
     console.log(this.stopPointsInRadius);
     this.getRoute(naptanId);
     this.circle.visible = false;
