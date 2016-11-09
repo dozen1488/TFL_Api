@@ -24,11 +24,17 @@ export class HTTPTestService
     public url : string;
 
     constructor (public http : Http){}
-    getList( LineID : string) 
+    getRoutes( LineID : string) 
     {
         this.url = this.ApiUrl + 
-        '/' + this.ApiMethod + '/' + LineID + '/' + 'Route' + 
-        '?' + 'app_id=' + this.AppId + '&app_key=' + this.AppKey;
+        '/' + this.ApiMethod + 
+        '/' + LineID + 
+        '/' + 'Route' + 
+        '?' + 'app_id=' + this.AppId + 
+        '&app_key=' + this.AppKey;
+
+        console.log(this.url);
+        
         return this.http.get(this.url).map( res => res.json()).catch(this.handleError);
     }
     private handleError (error: Response | any)
@@ -50,9 +56,17 @@ export class HTTPTestService
 
     getStops(lat : number , lng : number, radius : number)
     {
-        this.url = this.ApiUrl + '/' + this.ApiMethod + '?lat=' + lat + 
-        '&lon=' + lng + '&stopTypes=NaptanPublicBusCoachTram&radius=' + radius + '&useStopPointHierarchy=True&returnLines=True&app_id=' + this.AppId + 
+        this.url = this.ApiUrl + 
+        '/' + this.ApiMethod + 
+        '?lat=' + lat + 
+        '&lon=' + lng + 
+        '&stopTypes=NaptanPublicBusCoachTram&radius=' + radius + 
+        '&useStopPointHierarchy=True&returnLines=True&' +
+        'app_id=' + this.AppId + 
         '&app_key=' + this.AppKey;
+        
+        console.log(this.url);
+
         return this.http.get(this.url).map( res => res.json()).catch(this.handleError);
     }
 }

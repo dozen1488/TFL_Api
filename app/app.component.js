@@ -13,7 +13,7 @@ var httpservice_1 = require('./httpservice');
 var AppComponent = (function () {
     function AppComponent(httpservice) {
         this.httpservice = httpservice;
-        this.title = 'My first angular2-google-maps project';
+        this.title = 'Bus stops for you';
         this.lat = 51.5;
         this.lng = -0.05;
         this.zoom = 11;
@@ -22,11 +22,14 @@ var AppComponent = (function () {
         this.circle = new simplecircle();
         this.circle.radius = 300;
         this.circle.visible = false;
+        this.circle.draggable = false;
+        this.circle.latitude = this.lat;
+        this.circle.longitude = this.lat;
     };
     AppComponent.prototype.getRoute = function (naptanId) {
         var _this = this;
         this.route = new Array();
-        this.httpservice.getList(naptanId).subscribe(function (data) {
+        this.httpservice.getRoutes(naptanId).subscribe(function (data) {
             for (var i = 0; i < data.length; i++) {
                 _this.route[i] = JSON.parse(data[i].lineString)[0];
             }
@@ -42,11 +45,21 @@ var AppComponent = (function () {
             console.log(_this.stopPointsInRadius);
         }, function (error) { return console.log(error); });
     };
+    AppComponent.prototype.centerChange = function ($event) {
+        console.log($event);
+        this.route = [];
+        this.circle.latitude = $event.lat;
+        this.circle.longitude = $event.lng;
+        this.circle.visible = true;
+        this.getStops();
+    };
     AppComponent.prototype.changeRadius = function ($event) {
+        console.log('Change radius');
         this.circle.radius = Math.round($event);
         this.getStops();
     };
     AppComponent.prototype.mapClicked = function ($event) {
+        console.log('Map clicked');
         this.route = [];
         this.circle.latitude = $event.coords.lat;
         this.circle.longitude = $event.coords.lng;

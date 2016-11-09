@@ -6,30 +6,36 @@ import { SebmGoogleMapCircle } from 'angular2-google-maps/core';
 
 @Component({
   selector: 'app-root',
-  
   templateUrl: 'app/app.component.html',
   providers : [HTTPTestService]
-  //styleUrls: ['app.component.css'],
 })
 export class AppComponent implements OnInit
 {
+  title: string = 'Bus stops for you';
+  lat: number = 51.5;
+  lng: number = -0.05;
+  zoom: number = 11;
+
   public route : any[];
-
   public stopPointsInRadius : any[];
-
   public circle : simplecircle; 
+
+  constructor (private httpservice : HTTPTestService){}
 
   ngOnInit () : void 
   {
       this.circle = new simplecircle();
       this.circle.radius = 300;
       this.circle.visible = false;
+      this.circle.draggable = false;
+      this.circle.latitude = this.lat;
+      this.circle.longitude = this.lat;
   }
 
   getRoute(naptanId : string)
   {
       this.route = new Array();
-      this.httpservice.getList(naptanId).subscribe
+      this.httpservice.getRoutes(naptanId).subscribe
       (
           data => 
           {
@@ -42,8 +48,6 @@ export class AppComponent implements OnInit
       );
       console.log(this.httpservice.url);
   }
-
-  constructor (private httpservice : HTTPTestService){}
 
   getStops()
   {
@@ -65,14 +69,26 @@ export class AppComponent implements OnInit
         )
   }
 
-  changeRadius ($event : any)
+  centerChange($event : any)
   {
+      console.log($event);
+      this.route = [];
+      this.circle.latitude = $event.lat;
+      this.circle.longitude = $event.lng;
+      this.circle.visible = true;
+      this.getStops();
+  }
+
+  changeRadius($event : any)
+  {
+      console.log('Change radius');
       this.circle.radius = Math.round($event);
       this.getStops();
   }
 
   mapClicked($event : any)
   {
+    console.log('Map clicked');
     this.route = [];
     this.circle.latitude = $event.coords.lat;
     this.circle.longitude = $event.coords.lng;
@@ -97,11 +113,6 @@ export class AppComponent implements OnInit
     this.getRoute(naptanId);
     this.circle.visible = false;
   }
-
-  title: string = 'My first angular2-google-maps project';
-  lat: number = 51.5;
-  lng: number = -0.05;
-  zoom: number = 11;
 }
 
 export class simplecircle
@@ -110,4 +121,5 @@ export class simplecircle
     public longitude :number;
     public radius : number;
     public visible : boolean;
+    public draggable : boolean;
 }

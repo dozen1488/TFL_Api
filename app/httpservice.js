@@ -27,10 +27,14 @@ var HTTPTestService = (function () {
         this.ApiUrl = 'https://api.tfl.gov.uk';
         this.ApiMethod = 'StopPoint';
     }
-    HTTPTestService.prototype.getList = function (LineID) {
+    HTTPTestService.prototype.getRoutes = function (LineID) {
         this.url = this.ApiUrl +
-            '/' + this.ApiMethod + '/' + LineID + '/' + 'Route' +
-            '?' + 'app_id=' + this.AppId + '&app_key=' + this.AppKey;
+            '/' + this.ApiMethod +
+            '/' + LineID +
+            '/' + 'Route' +
+            '?' + 'app_id=' + this.AppId +
+            '&app_key=' + this.AppKey;
+        console.log(this.url);
         return this.http.get(this.url).map(function (res) { return res.json(); }).catch(this.handleError);
     };
     HTTPTestService.prototype.handleError = function (error) {
@@ -48,9 +52,15 @@ var HTTPTestService = (function () {
         return Observable_1.Observable.throw(errMsg);
     };
     HTTPTestService.prototype.getStops = function (lat, lng, radius) {
-        this.url = this.ApiUrl + '/' + this.ApiMethod + '?lat=' + lat +
-            '&lon=' + lng + '&stopTypes=NaptanPublicBusCoachTram&radius=' + radius + '&useStopPointHierarchy=True&returnLines=True&app_id=' + this.AppId +
+        this.url = this.ApiUrl +
+            '/' + this.ApiMethod +
+            '?lat=' + lat +
+            '&lon=' + lng +
+            '&stopTypes=NaptanPublicBusCoachTram&radius=' + radius +
+            '&useStopPointHierarchy=True&returnLines=True&' +
+            'app_id=' + this.AppId +
             '&app_key=' + this.AppKey;
+        console.log(this.url);
         return this.http.get(this.url).map(function (res) { return res.json(); }).catch(this.handleError);
     };
     HTTPTestService = __decorate([

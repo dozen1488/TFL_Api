@@ -18,9 +18,10 @@
                           [longitude]="circle.longitude" 
                           [radius]="circle.radius"
                           [fillColor]="'red'"
-                          [circleDraggable]="false"
+                          [circleDraggable]="circle.draggable"
                           [editable]="true"
                           [visible] = "circle.visible"
-                          (radiusChange) = "changeRadius($event)" >
+                          (radiusChange) = "changeRadius($event)"
+                          (centerChange) = "centerChange($event)">
   </sebm-google-map-circle>
 </sebm-google-map>
